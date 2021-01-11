@@ -4,8 +4,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import PlaceholderScreen from './Screens/PlaceholderScreen';
-import Daily from "./Screens/Daily";
-import Monthly from "./Screens/Monthly";
+import MainScreen from "./Screens/MainScreen";
 
 const Stack = createStackNavigator();
 
@@ -14,8 +13,8 @@ export default function App() {
     <NavigationContainer>
       <Stack.Navigator>
         <Stack.Screen
-          name="Daily"
-          component={Daily}
+          name="MainScreen"
+          component={MainScreen}
           options={{
             title: '',
             headerStyle: {
@@ -24,19 +23,6 @@ export default function App() {
               height: 0
             }
           }}  
-        />
-        <Stack.Screen 
-          name="Monthly" 
-          component={Monthly}
-          options={{
-            title: '',
-            headerStyle: {
-              backgroundColor: 'white',
-              elevation: 0,
-              height: 0
-            },
-            headerLeft: null
-          }}   
         />
         <Stack.Screen 
           name="Settings" 
