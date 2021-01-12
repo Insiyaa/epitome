@@ -1,6 +1,6 @@
 import React, { Component, useState, useEffect } from 'react';
 import { Container, Header, Left, Body, Right, Button, Icon, Title, Text } from 'native-base';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, TouchableOpacity } from 'react-native';
 import {Picker} from '@react-native-picker/picker';
 import { Entypo, MaterialIcons } from '@expo/vector-icons';
 
@@ -58,6 +58,15 @@ export default function MainScreen({ navigation }) {
 				</Right>
 			</Header>
 			<Content label={label} />
+			<TouchableOpacity
+				style={styles.floatingButton}
+				onPress={() => {
+					navigation.navigate("Add")
+					console.log('add pressed')
+				}}
+			>
+				<Entypo name="plus" size={24} color="white" />
+			</TouchableOpacity>
 		</Container>
 	);
 }
@@ -71,5 +80,18 @@ const styles = StyleSheet.create({
 	},
 	header: {
 		backgroundColor: '#C4C4C4'
+	},
+	floatingButton: {
+		borderWidth:1,
+		borderColor:'rgba(0,0,0,0.2)',
+		alignItems:'center',
+		justifyContent:'center',
+		width:60,
+		position: 'absolute',                                          
+		bottom: '4%',                                                    
+		right: '8%',
+		height:60,
+		backgroundColor:'black',
+		borderRadius:100,
 	}
 });

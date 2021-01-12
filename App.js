@@ -5,6 +5,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import PlaceholderScreen from './Screens/PlaceholderScreen';
 import MainScreen from "./Screens/MainScreen";
+import AddEntry from "./Screens/AddEntry";
 
 const Stack = createStackNavigator();
 
@@ -30,7 +31,12 @@ export default function App() {
         />
         <Stack.Screen 
           name="Add" 
-          component={PlaceholderScreen} 
+          component={AddEntry} 
+          options={{
+            title: '',
+            headerLeft: null,
+            headerShown: false,
+          }} 
         />
       </Stack.Navigator>
     </NavigationContainer>
