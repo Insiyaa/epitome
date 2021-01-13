@@ -13,16 +13,41 @@ import {
     View,
 } from 'react-native';
 import { Body, Button, Container, Header, Left, Right } from 'native-base';
+import moment from 'moment'
 
 import {actions, getContentCSS, RichEditor, RichToolbar} from 'react-native-pell-rich-editor';
 
 import { MaterialIcons } from '@expo/vector-icons';
+import {Picker} from '@react-native-picker/picker';
 
 
+import firebase from 'firebase';
+import "firebase/firestore";
 
+const saveEntry = (collection, data) => {
+	let title = '';
+	if (collection === 'daily') {
+		title = moment().format('ddd, MMMM Do YYYY');
+	} else {
+		title = moment().format('MMMM');
+	}
+
+	firebase
+	.firestore()
+	.collection(collection)
+	.add({
+	  title: title,
+	  body: data,
+	  timestamp: Date.now()
+	})
+	.then(() => {
+	  console.log('Entry added!');
+	});	
+}
 
 
 export default function AddEntry({navigation}) {
+	const [label, setLabel] = useState('daily');
 	const [richText, setRichText] = useState(React.createRef());
 	const [disabled, setDisabled] = useState(false);
 	const [richHTML, setRichHTML] = useState('');
@@ -47,71 +72,82 @@ export default function AddEntry({navigation}) {
 						/>
 				</Left>
 				<Body>
-					<Text style={styles.headerBody}>
-						Add Entry
-					</Text>
+					<Picker
+						selectedValue={label}
+						mode={'dropdown'}
+						style={styles.picker}
+						onValueChange={(itemValue, itemIndex) =>
+							setLabel(itemValue)
+						}>
+						<Picker.Item label="Daily" value="daily" />
+						<Picker.Item label="Monthly" value="monthly" />
+					</Picker>
 				</Body>
 				<Right>
-					<MaterialIcons name="save" size={26} color="black" />
+					<MaterialIcons 
+						name="save" 
+						size={26} 
+						color="black" 
+						onPress={() => {
+							console.log('save pressed')
+							saveEntry(label, richHTML)
+							navigation.goBack()
+						}}
+					/>
 				</Right>
 			</Header>
-        <ScrollView style={[styles.scroll]} keyboardDismissMode={'none'}>
-            <RichToolbar
-                style={[styles.richBar]}
-                flatContainerStyle={styles.flatStyle}
-                editor={richText}
-                disabled={disabled}
-                selectedIconTint={'#2095F2'}
-								disabledIconTint={'#bfbfbf'}
-								actions={[
-									actions.keyboard,
-									actions.setBold,
-									actions.setItalic,
-									actions.setStrikethrough,
-									actions.setUnderline,
-									actions.insertBulletsList,
-									actions.insertOrderedList,
-									actions.checkboxList,
-									actions.removeFormat,
-									actions.undo,
-									actions.redo
-								]}
-            />
-            <RichEditor
-                // initialFocus={true}
-                disabled={disabled}
-								editorStyle={styles.contentStyle} // default light style
-                ref={richText}
-                style={styles.rich}
-                placeholder={'Please input content'}
-                initialContentHTML={initHTML}
-                editorInitializedCallback={() => {
-									richText.current?.registerToolbar()
-								}}
-                onChange={(html) => {
-									setRichHTML(html)
-								}}
-                // onPaste={that.handlePaste}
-                // onKeyUp={that.handleKeyUp}
-                // onKeyDown={that.handleKeyDown}
-                // onMessage={that.handleMessage}
-                // onFocus={that.handleFocus}
-                // onBlur={that.handleBlur}
-                pasteAsPlainText={true}
-            />
-						
-        </ScrollView>
+			<ScrollView style={[styles.scroll]} keyboardDismissMode={'none'}>
+				{/* TODO: Add Daily Monthly Picker */}
+					<RichToolbar
+							style={[styles.richBar]}
+							flatContainerStyle={styles.flatStyle}
+							editor={richText}
+							disabled={disabled}
+							selectedIconTint={'#2095F2'}
+							disabledIconTint={'#bfbfbf'}
+							actions={[
+								actions.keyboard,
+								actions.setBold,
+								actions.setItalic,
+								actions.setStrikethrough,
+								actions.setUnderline,
+								actions.insertBulletsList,
+								actions.insertOrderedList,
+								actions.checkboxList,
+								actions.removeFormat,
+								actions.undo,
+								actions.redo
+							]}
+					/>
+					<RichEditor
+							// initialFocus={true}
+							disabled={disabled}
+							editorStyle={styles.contentStyle} // default light style
+							ref={richText}
+							style={styles.rich}
+							placeholder={'Please input content'}
+							initialContentHTML={initHTML}
+							editorInitializedCallback={() => {
+								richText.current?.registerToolbar()
+							}}
+							onChange={(html) => {
+								setRichHTML(html)
+							}}
+							// onPaste={that.handlePaste}
+							// onKeyUp={that.handleKeyUp}
+							// onKeyDown={that.handleKeyDown}
+							// onMessage={that.handleMessage}
+							// onFocus={that.handleFocus}
+							// onBlur={that.handleBlur}
+							pasteAsPlainText={true}
+					/>
+					
+			</ScrollView>
     </Container>
   );
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#fff',
-        alignItems: 'center',
-        justifyContent: 'center',
-		},
 		header: {
 			backgroundColor: '#C4C4C4'
 		},
@@ -132,64 +168,22 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#efefef',
     },
-    nav: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        marginHorizontal: 5,
-    },
     rich: {
         minHeight: 300,
         flex: 1,
-    },
-    topVi: {
-        backgroundColor: '#fafafa',
     },
     richBar: {
         borderColor: '#efefef',
         borderTopWidth: StyleSheet.hairlineWidth,
     },
-    richBarDark: {
-        backgroundColor: '#191d20',
-        borderColor: '#696969',
-    },
     scroll: {
         backgroundColor: '#ffffff',
-    },
-    scrollDark: {
-        backgroundColor: '#2e3847',
-    },
-    darkBack: {
-        backgroundColor: '#191d20',
-    },
-    item: {
-        borderBottomWidth: StyleSheet.hairlineWidth,
-        borderColor: '#e8e8e8',
-        flexDirection: 'row',
-        height: 40,
-        alignItems: 'center',
-        paddingHorizontal: 15,
-    },
-
-    input: {
-        flex: 1,
-    },
-
-    tib: {
-        textAlign: 'center',
-        color: '#515156',
-    },
-    flatStyle: {
-        paddingHorizontal: 12,
-		},
-		saveButton: {
-			// width: '20%',
-			borderRadius: 20,
-			alignContent: 'center',
-			alignSelf: 'center'
-
-		},
-		buttonText: {
-			padding: 20
-		}
+	},
+	picker: {
+		height: '100%',
+		width: 130,
+		left: '40%',
+		padding: 0
+	},
 });
 

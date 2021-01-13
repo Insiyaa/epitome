@@ -6,10 +6,34 @@ import { createStackNavigator } from '@react-navigation/stack';
 import PlaceholderScreen from './Screens/PlaceholderScreen';
 import MainScreen from "./Screens/MainScreen";
 import AddEntry from "./Screens/AddEntry";
+import { LogBox } from 'react-native';
+
+import firebase from 'firebase';
+import "firebase/firestore";
+
+import firebaseConfig from './firebase'
+
+console.log(firebaseConfig)
+firebase.initializeApp(firebaseConfig);
+// firebase.firestore().enablePersistence()
+// .catch(function(err) {
+//     if (err.code == 'failed-precondition') {
+//         // Multiple tabs open, persistence can only be enabled
+//         // in one tab at a a time.
+//         // ...
+//         console.log('err-1')
+//     } else if (err.code == 'unimplemented') {
+//         // The current browser does not support all of the
+//         // features required to enable persistence
+//         // ...
+//         console.log('err-2')
+//     }
+// });
 
 const Stack = createStackNavigator();
 
 export default function App() {
+  LogBox.ignoreLogs(['Setting a timer']);
   return (
     <NavigationContainer>
       <Stack.Navigator>
