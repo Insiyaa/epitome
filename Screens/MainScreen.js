@@ -1,13 +1,16 @@
 import React, { Component, useState, useEffect } from 'react';
 import { Container, Header, Left, Body, Right, Button, Icon, Title, Text, Picker } from 'native-base';
 import { StyleSheet, TouchableOpacity, FlatList, View, TouchableHighlight, ScrollView } from 'react-native';
+import {  useFocusEffect, useIsFocused  } from '@react-navigation/native';
 import Modal from 'react-native-modal';
 import HTML from "react-native-render-html";
 // import {Picker} from '@react-native-picker/picker';
 // import RNPickerSelect from 'react-native-picker-select';
 import { Entypo, MaterialIcons } from '@expo/vector-icons';
+import { AntDesign } from '@expo/vector-icons';
 import firebase from 'firebase';
 import "firebase/firestore";
+import {loggingOut} from '../firebaseMethods';
 // import { LogBox } from 'react-native';
 
 
@@ -23,30 +26,67 @@ import "firebase/firestore";
 export default function MainScreen({ navigation }) {
 	// LogBox.ignoreAllLogs()
 		// need to render as list of modals
+	let currentUser = firebase.auth().currentUser
+	if (currentUser) var currentUserUID = firebase.auth().currentUser.uid;
+	else navigation.navigate('Loading')
+	console.log(currentUserUID)
+
 	const [entries, setEntries] = useState({'daily': [], 'monthly': []});
+	const isFocused = useIsFocused();
 
 
 	const [label, setLabel] = useState('daily');
 	const [refresh, toggleRefresh] = useState(false);
+	// toggleRefresh(!refresh)
 	useEffect(() => {
+		try {
+			console.log('foc2')
+			let data = []
+			firebase.firestore()
+			.collection('users')
+			.doc(currentUserUID)
+			.collection(label)
+			.orderBy("timestamp", "desc")
+			.get()
+			.then(querySnapshot => {
+				// console.log('Total users: ', querySnapshot.size);
 
-		let data = []
-		firebase.firestore()
-		.collection(label)
-		.orderBy("timestamp", "desc")
-		.get()
-		.then(querySnapshot => {
-			// console.log('Total users: ', querySnapshot.size);
-
-			querySnapshot.forEach(documentSnapshot => {
-				// console.log('User ID: ', documentSnapshot.id, documentSnapshot.data());
-				data.push(documentSnapshot.data());
+				querySnapshot.forEach(documentSnapshot => {
+					// console.log('User ID: ', documentSnapshot.id, documentSnapshot.data());
+					data.push(documentSnapshot.data());
+				});
+				let newEntries = {'daily': [], 'monthly': []}
+				newEntries[label] = data;
+				setEntries(newEntries);
 			});
-			let newEntries = {'daily': [], 'monthly': []}
-			newEntries[label] = data;
-			setEntries(newEntries);
-		});
-	}, [label, refresh])
+		} catch (error) {
+			console.log('error: ', error)
+		}
+		
+	}, [label, isFocused])
+
+
+	// useFocusEffect(React.useCallback(() => {
+	// 	console.log('foc')
+	// 	let data = []
+	// 	firebase.firestore()
+	// 	.collection('users')
+	// 	.doc(currentUserUID)
+	// 	.collection(label)
+	// 	.orderBy("timestamp", "desc")
+	// 	.get()
+	// 	.then(querySnapshot => {
+	// 		// console.log('Total users: ', querySnapshot.size);
+
+	// 		querySnapshot.forEach(documentSnapshot => {
+	// 			// console.log('User ID: ', documentSnapshot.id, documentSnapshot.data());
+	// 			data.push(documentSnapshot.data());
+	// 		});
+	// 		let newEntries = {'daily': [], 'monthly': []}
+	// 		newEntries[label] = data;
+	// 		setEntries(newEntries);
+	// 	});
+	// }))
 
 	const onPressItem = (index) => {
 		console.log('item pressed')
@@ -110,22 +150,23 @@ export default function MainScreen({ navigation }) {
 					</Picker>
 				</Body>
 				{/* TODO: Implement Notifications */}
-				{/* <Right>
+				<Right>
 					<Button 
 						transparent
 						onPress={() => {
-							navigation.navigate('Settings')
+							loggingOut();
+							navigation.navigate('Home')
 						}}
 					>
-					<MaterialIcons name="settings" size={24} color="#6F6F6F" />
+					<AntDesign name="logout" size={24} color="#6F6F6F" />
 					</Button>
-				</Right> */}
+				</Right>
 			</Header>
 			<TouchableOpacity
 				style={styles.floatingButton}
 				onPress={() => {
 					navigation.navigate("Add")
-					toggleRefresh(!refresh);
+					// toggleRefresh(!refresh);
 					console.log('add pressed')
 				}}
 			>
@@ -180,7 +221,7 @@ const styles = StyleSheet.create({
 	picker: {
 		height: '100%',
 		width: 130,
-		left: '20%',
+		left: '40%',
 		padding: 0,
 		color: '#6F6F6F',
 		fontFamily: 'OpenSans_semiBold',

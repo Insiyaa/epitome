@@ -6,8 +6,8 @@
     "orientation": "portrait",
     "icon": "./assets/feather.png",
     "splash": {
-      "image": "./assets/splash.png",
-      "resizeMode": "contain",
+      "image": "./assets/splashF.png",
+      "resizeMode": "cover",
       "backgroundColor": "#ffffff"
     },
     "updates": {
@@ -20,10 +20,6 @@
       "supportsTablet": true
     },
     "android": {
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/feather.png",
-        "backgroundColor": "#FFFFFF"
-      },
       "package": "com.insiyah.epitome",
       "versionCode": 1
     },

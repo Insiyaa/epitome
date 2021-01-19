@@ -24,7 +24,7 @@ import { MaterialIcons } from '@expo/vector-icons';
 import firebase from 'firebase';
 import "firebase/firestore";
 
-const saveEntry = (collection, data) => {
+const saveEntry = (collection, data, currentUserUID) => {
 	console.log(collection, data)
 	let title = '';
 	if (collection === 'daily') {
@@ -35,6 +35,8 @@ const saveEntry = (collection, data) => {
 
 	firebase
 	.firestore()
+	.collection('users')
+	.doc(currentUserUID)
 	.collection(collection)
 	.add({
 	  title: title,
@@ -58,6 +60,8 @@ export default function AddEntry({navigation}) {
 	<b>Location: </b>
 	`;
 	const [richHTML, setRichHTML] = useState(initHTML);
+	let currentUserUID = firebase.auth().currentUser.uid;
+
 	
   return (
     <Container>
@@ -91,7 +95,7 @@ export default function AddEntry({navigation}) {
 						color="#6F6F6F" 
 						onPress={() => {
 							console.log('save pressed')
-							saveEntry(label, richHTML)
+							saveEntry(label, richHTML, currentUserUID)
 							navigation.goBack()
 						}}
 					/>
