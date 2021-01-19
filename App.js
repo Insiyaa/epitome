@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import React from 'react';
+import React, {useEffect} from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -7,6 +7,7 @@ import PlaceholderScreen from './Screens/PlaceholderScreen';
 import MainScreen from "./Screens/MainScreen";
 import AddEntry from "./Screens/AddEntry";
 import { LogBox } from 'react-native';
+import * as Font from 'expo-font';
 
 import firebase from 'firebase';
 import "firebase/firestore";
@@ -34,6 +35,12 @@ const Stack = createStackNavigator();
 
 export default function App() {
   LogBox.ignoreLogs(['Setting a timer']);
+  useEffect(() => {
+    (async () => await Font.loadAsync({
+      Roboto: require('native-base/Fonts/Roboto.ttf'),
+      Roboto_medium: require('native-base/Fonts/Roboto_medium.ttf'),
+    }))();
+     }, [])
   return (
     <NavigationContainer>
       <Stack.Navigator>

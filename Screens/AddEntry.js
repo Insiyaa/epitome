@@ -12,13 +12,13 @@ import {
     TextInput,
     View,
 } from 'react-native';
-import { Body, Button, Container, Header, Left, Right } from 'native-base';
+import { Body, Button, Container, Header, Left, Right, Picker } from 'native-base';
 import moment from 'moment'
 
 import {actions, getContentCSS, RichEditor, RichToolbar} from 'react-native-pell-rich-editor';
 
 import { MaterialIcons } from '@expo/vector-icons';
-import {Picker} from '@react-native-picker/picker';
+// import {Picker} from '@react-native-picker/picker';
 
 
 import firebase from 'firebase';
