@@ -55,6 +55,7 @@ export default function MainScreen({ navigation }) {
 		onPress={() => {
 			onPressItem(index);
 		}}
+		style={styles.listItem}
 		>
 			<Text style={styles.itemText}>{item.title}</Text>
 		</TouchableOpacity>
@@ -105,10 +106,10 @@ export default function MainScreen({ navigation }) {
 	const [modalData, setModalData] = useState({title: '', body: ''});
 	
 	return (
-		<Container>
+		<Container style={styles.container}>
 			<Header style={styles.header}>
 				<Left>
-					<Entypo name="feather" size={30} color="black" />
+					<Entypo name="feather" size={32} color="#6F6F6F" />
 				</Left>
 				<Body>
 					<Picker
@@ -118,8 +119,8 @@ export default function MainScreen({ navigation }) {
 						onValueChange={(itemValue, itemIndex) =>
 							setLabel(itemValue)
 						}>
-						<Picker.Item label="Daily" value="daily" />
-						<Picker.Item label="Monthly" value="monthly" />
+						<Picker.Item label="Daily" value="daily" style={{fontFamily: 'OpenSans_semiBold'}}/>
+						<Picker.Item label="Monthly" value="monthly"  style={{fontFamily: 'OpenSans_semiBold'}}/>
 					</Picker>
 				</Body>
 				<Right>
@@ -129,31 +130,10 @@ export default function MainScreen({ navigation }) {
 							navigation.navigate('Settings')
 						}}
 					>
-					<MaterialIcons name="settings" size={24} color="black" />
+					<MaterialIcons name="settings" size={24} color="#6F6F6F" />
 					</Button>
 				</Right>
 			</Header>
-			<Modal isVisible={isModalVisible}>
-				<View style={{flex: 1}}>
-					<Text>{modalData.title}</Text>
-					<HTML source={{ html: modalData.body }} />
-
-					<Button title="Hide modal" onPress={toggleModal} ><Text> Hide Modal</Text></Button>
-				</View>
-			</Modal>
-
-			{/* <ScrollView style={styles.container}> */}
-				<FlatList 
-					data={entries[label]}
-					ItemSeparatorComponent = {flatListItemSeparator}
-					renderItem={renderItem}
-					keyExtractor={keyExtractor}
-				/>
-			{/* </ScrollView> */}
-			
-
-
-			{/* <Content label={label} /> */}
 			<TouchableOpacity
 				style={styles.floatingButton}
 				onPress={() => {
@@ -161,47 +141,88 @@ export default function MainScreen({ navigation }) {
 					console.log('add pressed')
 				}}
 			>
-				<Entypo name="plus" size={24} color="white" />
+				<Entypo name="plus" size={24} color="#6F6F6F" />
 			</TouchableOpacity>
-			{/* {modalVisible && <MyModal item={modalData} /> } */}
+			<View>
+
+
+				<Modal propagateSwipe
+				isVisible={isModalVisible}
+				>
+					<View style={{flex:1}}>
+						<View style={styles.modalTitle}>
+							<Text style={styles.modalTitleText}>
+							{modalData.title}
+							</Text>
+						</View>
+						
+						<ScrollView style={styles.modalBody}>
+							<HTML source={{ html: modalData.body }} style={styles.modalBodyText} />
+						</ScrollView>
+						
+						<Button title="Hide modal" onPress={toggleModal} style={styles.closeButton}>
+							<MaterialIcons 
+							name="close" 
+							size={26} 
+							color="#6F6F6F"
+							/>
+						</Button>
+					</View>
+				</Modal>
+
+				{/* <ScrollView > */}
+					<FlatList 
+						data={entries[label]}
+						// ItemSeparatorComponent = {flatListItemSeparator}
+						renderItem={renderItem}
+						keyExtractor={keyExtractor}
+					/>
+				{/* </ScrollView> */}
+			
+			</View>
 		</Container>
 	);
 }
 
 const styles = StyleSheet.create({
-  picker: {
+  	container: {
+		backgroundColor: '#EDEDED',
+		fontFamily: 'OpenSans_semiBold',
+	},
+	picker: {
 		height: '100%',
 		width: 130,
 		left: '40%',
-		padding: 0
+		padding: 0,
+		color: '#6F6F6F',
+		fontFamily: 'OpenSans_semiBold',
+
 	},
 	header: {
-		backgroundColor: '#C4C4C4'
+		backgroundColor: '#EDEDED',
+		elevation: 0
 	},
 	floatingButton: {
-		borderWidth:1,
-		borderColor:'rgba(0,0,0,0.2)',
+		// borderWidth:1,
+		// borderColor:'rgba(0,0,0,0.2)',
 		alignItems:'center',
 		justifyContent:'center',
-		width:60,
-		position: 'absolute',                                          
-		bottom: '4%',                                                    
-		right: '8%',
-		height:60,
-		backgroundColor:'black',
-		borderRadius:100,
+		// width:60,
+		// position: 'absolute',                                          
+		// top: '10%',                                                    
+		// right: '50%',
+		// height:60,
+		backgroundColor:'#DADADA',
+		margin: '5%',
+		marginBottom: 0,
+		height: '6%',
+		borderRadius: 10,
 	},
-	container: {
-    flex: 1,
-    // justifyContent: 'center',
-    padding: 20,
-    backgroundColor: 'red',
-  },
-  innerContainer: {
-    borderRadius: 10,
-    alignItems: 'center',
-    backgroundColor: 'blue',
-  },
+	innerContainer: {
+		borderRadius: 10,
+		alignItems: 'center',
+		backgroundColor: 'blue',
+	},
 	buttonContainer: {
 			paddingVertical: 15,
 			marginTop: 20,
@@ -213,10 +234,22 @@ const styles = StyleSheet.create({
 			color: '#ecf0f1',
 			fontWeight: '700'
 	},
+	listItem: {
+		backgroundColor: 'white',
+		margin: '6%',
+		marginBottom: 0,
+		height: 50,
+		borderRadius: 10,
+		justifyContent: 'center'
+	},
 	itemText: {
-		padding: 10,
+		// padding: 10,
 		fontSize: 15,
-		color: '#ecf0f1',
+		color: '#484848',
+		alignContent: 'center',
+		alignSelf:'center',
+		fontFamily: 'OpenSans_semiBold',
+
 	},
 	itemSeparator: {
 		height: 1,
@@ -224,7 +257,44 @@ const styles = StyleSheet.create({
 		backgroundColor: "#34495e",
 	},
 	row: {
-		backgroundColor: '#2c3e50',
+		backgroundColor: 'white',
 		borderRadius: 5
 	},
+	modalTitle: {
+		backgroundColor: 'white',
+		marginBottom: 0,
+		height: 50,
+		borderRadius: 10,
+		justifyContent: 'center'
+		
+	},
+	modalTitleText: {
+		fontSize: 15,
+		color: '#484848',
+		alignContent: 'center',
+		alignSelf:'center',
+		fontFamily: 'OpenSans_semiBold',
+	},
+	modalBody: {
+		marginTop: '6%',
+		marginBottom: '6%',
+		backgroundColor: 'white',
+		height: 30,
+		borderRadius: 10,
+		padding: '6%'
+	},
+	modalBodyText: {
+		fontSize: 15,
+		color: '#484848',
+		alignContent: 'center',
+		alignSelf:'center',
+		fontFamily: 'OpenSans_semiBold',
+	},
+	closeButton: {
+		alignSelf: 'center',
+		width: '20%',
+		justifyContent: 'center',
+		backgroundColor: 'white',
+		borderRadius: 100
+	}
 });

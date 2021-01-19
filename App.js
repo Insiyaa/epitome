@@ -6,8 +6,11 @@ import { createStackNavigator } from '@react-navigation/stack';
 import PlaceholderScreen from './Screens/PlaceholderScreen';
 import MainScreen from "./Screens/MainScreen";
 import AddEntry from "./Screens/AddEntry";
+import Settings from './Screens/Settings'
 import { LogBox } from 'react-native';
-import * as Font from 'expo-font';
+import AppLoading from 'expo-app-loading';
+import { useFonts } from 'expo-font';
+// import * as Font from 'expo-font';
 
 import firebase from 'firebase';
 import "firebase/firestore";
@@ -35,12 +38,22 @@ const Stack = createStackNavigator();
 
 export default function App() {
   LogBox.ignoreLogs(['Setting a timer']);
-  useEffect(() => {
-    (async () => await Font.loadAsync({
-      Roboto: require('native-base/Fonts/Roboto.ttf'),
-      Roboto_medium: require('native-base/Fonts/Roboto_medium.ttf'),
-    }))();
-     }, [])
+  // useEffect(() => {
+  //   (async () => await Font.loadAsync({
+  //     Roboto: require('native-base/Fonts/Roboto.ttf'),
+  //     Roboto_medium: require('native-base/Fonts/Roboto_medium.ttf'),
+  //     OpenSans_semiBold: require('assets/fonts/OpenSans-SemiBold.ttf'),
+  //   }))();
+  //    }, [])
+
+  let [fontsLoaded] = useFonts({
+    'Roboto': require('native-base/Fonts/Roboto.ttf'),
+    'Roboto_medium': require('native-base/Fonts/Roboto_medium.ttf'),
+    'OpenSans_semiBold': require('./assets/fonts/OpenSans-SemiBold.ttf'),
+  });
+
+  if (!fontsLoaded) return <AppLoading />
+  else
   return (
     <NavigationContainer>
       <Stack.Navigator>
@@ -58,7 +71,12 @@ export default function App() {
         />
         <Stack.Screen 
           name="Settings" 
-          component={PlaceholderScreen} 
+          component={Settings}
+          options={{
+            title: '',
+            headerLeft: null,
+            headerShown: false,
+          }} 
         />
         <Stack.Screen 
           name="Add" 

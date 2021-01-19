@@ -65,7 +65,7 @@ export default function AddEntry({navigation}) {
 					<MaterialIcons 
 						name="close" 
 						size={26} 
-						color="black"
+						color="#6F6F6F"
 						onPress={() => {
 							navigation.goBack()
 						}}
@@ -87,7 +87,7 @@ export default function AddEntry({navigation}) {
 					<MaterialIcons 
 						name="save" 
 						size={26} 
-						color="black" 
+						color="#6F6F6F" 
 						onPress={() => {
 							console.log('save pressed')
 							saveEntry(label, richHTML)
@@ -148,15 +148,15 @@ export default function AddEntry({navigation}) {
 }
 
 const styles = StyleSheet.create({
-		header: {
-			backgroundColor: '#C4C4C4'
-		},
-		headerBody: {
-			fontSize: 18,
-			fontWeight: 'bold',
-			textAlign: 'center',
-			left: '50%'
-		},
+	header: {
+		backgroundColor: '#EDEDED'
+	},
+	headerBody: {
+		fontSize: 18,
+		fontWeight: 'bold',
+		textAlign: 'center',
+		left: '50%'
+	},
     contentStyle: {
         backgroundColor: '#fff',
         color: '#000033',
@@ -183,7 +183,8 @@ const styles = StyleSheet.create({
 		height: '100%',
 		width: 130,
 		left: '40%',
-		padding: 0
+		padding: 0,
+		color: '#777777'
 	},
 });
 
