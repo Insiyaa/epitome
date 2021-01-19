@@ -10,6 +10,7 @@ import Settings from './Screens/Settings'
 import { LogBox } from 'react-native';
 import AppLoading from 'expo-app-loading';
 import { useFonts } from 'expo-font';
+// import NotifService from './NotifService';
 // import * as Font from 'expo-font';
 
 import firebase from 'firebase';
@@ -38,14 +39,7 @@ const Stack = createStackNavigator();
 
 export default function App() {
   LogBox.ignoreLogs(['Setting a timer']);
-  // useEffect(() => {
-  //   (async () => await Font.loadAsync({
-  //     Roboto: require('native-base/Fonts/Roboto.ttf'),
-  //     Roboto_medium: require('native-base/Fonts/Roboto_medium.ttf'),
-  //     OpenSans_semiBold: require('assets/fonts/OpenSans-SemiBold.ttf'),
-  //   }))();
-  //    }, [])
-
+  
   let [fontsLoaded] = useFonts({
     'Roboto': require('native-base/Fonts/Roboto.ttf'),
     'Roboto_medium': require('native-base/Fonts/Roboto_medium.ttf'),

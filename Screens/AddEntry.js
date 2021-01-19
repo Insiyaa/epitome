@@ -25,6 +25,7 @@ import firebase from 'firebase';
 import "firebase/firestore";
 
 const saveEntry = (collection, data) => {
+	console.log(collection, data)
 	let title = '';
 	if (collection === 'daily') {
 		title = moment().format('ddd, MMMM Do YYYY');
@@ -50,14 +51,14 @@ export default function AddEntry({navigation}) {
 	const [label, setLabel] = useState('daily');
 	const [richText, setRichText] = useState(React.createRef());
 	const [disabled, setDisabled] = useState(false);
-	const [richHTML, setRichHTML] = useState('');
-	const theme =  Appearance.getColorScheme();
 	const initHTML = `<b>Summary:</b>
 	</br>
 	<b>Satisfaction (out of 10): </b>
 	</br>
 	<b>Location: </b>
 	`;
+	const [richHTML, setRichHTML] = useState(initHTML);
+	
   return (
     <Container>
 			<Header style={styles.header}>
@@ -109,11 +110,11 @@ export default function AddEntry({navigation}) {
 								actions.keyboard,
 								actions.setBold,
 								actions.setItalic,
-								actions.setStrikethrough,
+								// actions.setStrikethrough,
 								actions.setUnderline,
 								actions.insertBulletsList,
 								actions.insertOrderedList,
-								actions.checkboxList,
+								// actions.checkboxList,
 								actions.removeFormat,
 								actions.undo,
 								actions.redo

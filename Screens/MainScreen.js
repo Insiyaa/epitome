@@ -27,10 +27,13 @@ export default function MainScreen({ navigation }) {
 
 
 	const [label, setLabel] = useState('daily');
+	const [refresh, toggleRefresh] = useState(false);
 	useEffect(() => {
+
 		let data = []
 		firebase.firestore()
 		.collection(label)
+		.orderBy("timestamp", "desc")
 		.get()
 		.then(querySnapshot => {
 			// console.log('Total users: ', querySnapshot.size);
@@ -43,7 +46,7 @@ export default function MainScreen({ navigation }) {
 			newEntries[label] = data;
 			setEntries(newEntries);
 		});
-	}, [label])
+	}, [label, refresh])
 
 	const onPressItem = (index) => {
 		console.log('item pressed')
@@ -73,23 +76,6 @@ export default function MainScreen({ navigation }) {
 
 	const keyExtractor = (item, index) => item.timestamp.toString()
 
-	const flatListItemSeparator = () => {
-		return (
-			<View
-			style={styles.itemSeparator}
-			/>
-		);
-	}
-
-	const Content = () => {
-		return (
-			<FlatList
-				data={entries[label]}
-				renderItem={renderItem}
-				keyExtractor={keyExtractor}
-			/>
-		);	
-	}
 	const toggleModal = () => {
 		setModalVisible(!isModalVisible);
 	};
@@ -123,7 +109,8 @@ export default function MainScreen({ navigation }) {
 						<Picker.Item label="Monthly" value="monthly"  style={{fontFamily: 'OpenSans_semiBold'}}/>
 					</Picker>
 				</Body>
-				<Right>
+				{/* TODO: Implement Notifications */}
+				{/* <Right>
 					<Button 
 						transparent
 						onPress={() => {
@@ -132,18 +119,18 @@ export default function MainScreen({ navigation }) {
 					>
 					<MaterialIcons name="settings" size={24} color="#6F6F6F" />
 					</Button>
-				</Right>
+				</Right> */}
 			</Header>
 			<TouchableOpacity
 				style={styles.floatingButton}
 				onPress={() => {
 					navigation.navigate("Add")
+					toggleRefresh(!refresh);
 					console.log('add pressed')
 				}}
 			>
 				<Entypo name="plus" size={24} color="#6F6F6F" />
 			</TouchableOpacity>
-			<View>
 
 
 				<Modal propagateSwipe
@@ -171,15 +158,16 @@ export default function MainScreen({ navigation }) {
 				</Modal>
 
 				{/* <ScrollView > */}
+				<View style={{ flex: 1, width: '100%' }}>
 					<FlatList 
 						data={entries[label]}
 						// ItemSeparatorComponent = {flatListItemSeparator}
 						renderItem={renderItem}
 						keyExtractor={keyExtractor}
-					/>
+					/></View>
 				{/* </ScrollView> */}
 			
-			</View>
+			
 		</Container>
 	);
 }
@@ -192,7 +180,7 @@ const styles = StyleSheet.create({
 	picker: {
 		height: '100%',
 		width: 130,
-		left: '40%',
+		left: '20%',
 		padding: 0,
 		color: '#6F6F6F',
 		fontFamily: 'OpenSans_semiBold',
@@ -203,15 +191,8 @@ const styles = StyleSheet.create({
 		elevation: 0
 	},
 	floatingButton: {
-		// borderWidth:1,
-		// borderColor:'rgba(0,0,0,0.2)',
 		alignItems:'center',
 		justifyContent:'center',
-		// width:60,
-		// position: 'absolute',                                          
-		// top: '10%',                                                    
-		// right: '50%',
-		// height:60,
 		backgroundColor:'#DADADA',
 		margin: '5%',
 		marginBottom: 0,
