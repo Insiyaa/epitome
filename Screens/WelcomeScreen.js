@@ -29,7 +29,6 @@ const styles = StyleSheet.create({
   button: {
     width: 150,
     borderRadius: 50,
-    // borderWidth: 3,
     borderColor: 'white',
     backgroundColor: '#DADADA',
     padding: 5,
@@ -45,13 +44,12 @@ const styles = StyleSheet.create({
   inlineText: {
     fontSize: 16,
     fontFamily: 'OpenSans_semiBold',
-    // fontWeight: 'bold',
     color: '#DADADA',
     textAlign: 'center',
     marginTop: '5%',
   },
   title: {
-    fontSize: 30,
+    fontSize: 28,
     fontFamily: 'OpenSans_semiBold',
     color: 'white',
     textAlign: 'center'

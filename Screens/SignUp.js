@@ -110,7 +110,6 @@ const styles = StyleSheet.create({
     width: 120,
     padding: 5,
     backgroundColor: '#6F6F6F',
-    // borderWidth: 2,
     borderColor: 'white',
     borderRadius: 50,
     alignSelf: 'center',
@@ -127,7 +126,6 @@ const styles = StyleSheet.create({
   inlineText: {
     fontSize: 16,
     fontFamily: 'OpenSans_semiBold',
-    // fontWeight: 'bold',
     color: '#6F6F6F',
     textAlign: 'center',
     marginTop: '5%',

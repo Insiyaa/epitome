@@ -1,17 +1,18 @@
-import React, { Component, useState, useEffect } from 'react';
-import { Container, Header, Left, Body, Right, Button, Icon, Title, Text, Picker } from 'native-base';
-import { StyleSheet, TouchableOpacity, FlatList, View, TouchableHighlight, ScrollView } from 'react-native';
-import {  useFocusEffect, useIsFocused  } from '@react-navigation/native';
+import React, { useState, useEffect } from 'react';
+
+import { Container, Header, Left, Body, Right, Button, Text, Picker } from 'native-base';
+
+import { StyleSheet, TouchableOpacity, FlatList, View, ScrollView } from 'react-native';
+import {  useIsFocused  } from '@react-navigation/native';
 import Modal from 'react-native-modal';
 import HTML from "react-native-render-html";
-// import {Picker} from '@react-native-picker/picker';
-// import RNPickerSelect from 'react-native-picker-select';
+
 import { Entypo, MaterialIcons } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons';
+
 import firebase from 'firebase';
 import "firebase/firestore";
 import {loggingOut} from '../firebaseMethods';
-// import { LogBox } from 'react-native';
 
 
 
@@ -19,28 +20,22 @@ import {loggingOut} from '../firebaseMethods';
 // state data into the modal and open the modal.
 
 
-
-// Use React hooks to populate data
-
-
 export default function MainScreen({ navigation }) {
-	// LogBox.ignoreAllLogs()
-		// need to render as list of modals
+
 	let currentUser = firebase.auth().currentUser
 	if (currentUser) var currentUserUID = firebase.auth().currentUser.uid;
 	else navigation.navigate('Loading')
-	console.log(currentUserUID)
 
 	const [entries, setEntries] = useState({'daily': [], 'monthly': []});
+
+	// To reload whenever screen comes in focus
 	const isFocused = useIsFocused();
 
-
 	const [label, setLabel] = useState('daily');
-	const [refresh, toggleRefresh] = useState(false);
-	// toggleRefresh(!refresh)
+
+	// Reload everytime label and isFocused changes
 	useEffect(() => {
 		try {
-			console.log('foc2')
 			let data = []
 			firebase.firestore()
 			.collection('users')
@@ -65,34 +60,12 @@ export default function MainScreen({ navigation }) {
 		
 	}, [label, isFocused])
 
-
-	// useFocusEffect(React.useCallback(() => {
-	// 	console.log('foc')
-	// 	let data = []
-	// 	firebase.firestore()
-	// 	.collection('users')
-	// 	.doc(currentUserUID)
-	// 	.collection(label)
-	// 	.orderBy("timestamp", "desc")
-	// 	.get()
-	// 	.then(querySnapshot => {
-	// 		// console.log('Total users: ', querySnapshot.size);
-
-	// 		querySnapshot.forEach(documentSnapshot => {
-	// 			// console.log('User ID: ', documentSnapshot.id, documentSnapshot.data());
-	// 			data.push(documentSnapshot.data());
-	// 		});
-	// 		let newEntries = {'daily': [], 'monthly': []}
-	// 		newEntries[label] = data;
-	// 		setEntries(newEntries);
-	// 	});
-	// }))
-
 	const onPressItem = (index) => {
-		console.log('item pressed')
+		// console.log('item pressed')
 		setModalData(entries[label][index]);
 		toggleModal();
 	}
+
 	const MyItem = ({item, index}) => (
 		<TouchableOpacity 
 		onPress={() => {
@@ -103,6 +76,7 @@ export default function MainScreen({ navigation }) {
 			<Text style={styles.itemText}>{item.title}</Text>
 		</TouchableOpacity>
 	)
+
 	const renderItem = ({ item, index }) => (
 		<MyItem 
 			style={styles.row}
@@ -114,20 +88,13 @@ export default function MainScreen({ navigation }) {
 		/>
 	);
 
-	const keyExtractor = (item, index) => item.timestamp.toString()
+	const keyExtractor = (item) => item.timestamp.toString()
 
 	const toggleModal = () => {
 		setModalVisible(!isModalVisible);
 	};
 	
-
-	// function MyModal({item}) {
-	// 	return (
-				
-
-	// );
-	// }
-
+	// Modal visibility and Data
 	const [isModalVisible, setModalVisible] = useState(false);
 	const [modalData, setModalData] = useState({title: '', body: ''});
 	
@@ -142,7 +109,7 @@ export default function MainScreen({ navigation }) {
 						selectedValue={label}
 						mode={'dropdown'}
 						style={styles.picker}
-						onValueChange={(itemValue, itemIndex) =>
+						onValueChange={(itemValue) =>
 							setLabel(itemValue)
 						}>
 						<Picker.Item label="Daily" value="daily" style={{fontFamily: 'OpenSans_semiBold'}}/>
@@ -158,7 +125,7 @@ export default function MainScreen({ navigation }) {
 							navigation.navigate('Home')
 						}}
 					>
-					<AntDesign name="logout" size={24} color="#6F6F6F" />
+						<AntDesign name="logout" size={24} color="#6F6F6F" />
 					</Button>
 				</Right>
 			</Header>
@@ -166,8 +133,7 @@ export default function MainScreen({ navigation }) {
 				style={styles.floatingButton}
 				onPress={() => {
 					navigation.navigate("Add")
-					// toggleRefresh(!refresh);
-					console.log('add pressed')
+					// console.log('add pressed')
 				}}
 			>
 				<Entypo name="plus" size={24} color="#6F6F6F" />
@@ -184,7 +150,7 @@ export default function MainScreen({ navigation }) {
 							</Text>
 						</View>
 						
-						<ScrollView style={styles.modalBody}>
+						<ScrollView style={styles.modalBody} contentContainerStyle={{paddingBottom: 40}}>
 							<HTML source={{ html: modalData.body }} style={styles.modalBodyText} />
 						</ScrollView>
 						
@@ -198,16 +164,14 @@ export default function MainScreen({ navigation }) {
 					</View>
 				</Modal>
 
-				{/* <ScrollView > */}
 				<View style={{ flex: 1, width: '100%' }}>
 					<FlatList 
 						data={entries[label]}
 						// ItemSeparatorComponent = {flatListItemSeparator}
 						renderItem={renderItem}
 						keyExtractor={keyExtractor}
-					/></View>
-				{/* </ScrollView> */}
-			
+					/>
+				</View>
 			
 		</Container>
 	);
@@ -303,7 +267,7 @@ const styles = StyleSheet.create({
 		backgroundColor: 'white',
 		height: 30,
 		borderRadius: 10,
-		padding: '6%'
+		padding: '7%',
 	},
 	modalBodyText: {
 		fontSize: 15,

@@ -1,24 +1,16 @@
-import React, { Component, useState } from "react";
+import React, { useState } from "react";
+
 import {
-    Appearance,
-    Keyboard,
-    KeyboardAvoidingView,
-    Platform,
-    SafeAreaView,
     ScrollView,
-    StatusBar,
     StyleSheet,
-    Text,
-    TextInput,
-    View,
 } from 'react-native';
-import { Body, Button, Container, Header, Left, Right, Picker } from 'native-base';
+
+import { Body, Container, Header, Left, Right, Picker } from 'native-base';
 import moment from 'moment'
 
-import {actions, getContentCSS, RichEditor, RichToolbar} from 'react-native-pell-rich-editor';
+import {actions, RichEditor, RichToolbar} from 'react-native-pell-rich-editor';
 
 import { MaterialIcons } from '@expo/vector-icons';
-// import {Picker} from '@react-native-picker/picker';
 
 
 import firebase from 'firebase';
@@ -51,8 +43,8 @@ const saveEntry = (collection, data, currentUserUID) => {
 
 export default function AddEntry({navigation}) {
 	const [label, setLabel] = useState('daily');
-	const [richText, setRichText] = useState(React.createRef());
-	const [disabled, setDisabled] = useState(false);
+	const [richText] = useState(React.createRef());
+	const [disabled] = useState(false);
 	const initHTML = `<b>Summary:</b>
 	</br>
 	<b>Satisfaction (out of 10): </b>
@@ -81,7 +73,7 @@ export default function AddEntry({navigation}) {
 						selectedValue={label}
 						mode={'dropdown'}
 						style={styles.picker}
-						onValueChange={(itemValue, itemIndex) =>
+						onValueChange={(itemValue) =>
 							setLabel(itemValue)
 						}>
 						<Picker.Item label="Daily" value="daily" />
@@ -102,7 +94,6 @@ export default function AddEntry({navigation}) {
 				</Right>
 			</Header>
 			<ScrollView style={[styles.scroll]} keyboardDismissMode={'none'}>
-				{/* TODO: Add Daily Monthly Picker */}
 					<RichToolbar
 							style={[styles.richBar]}
 							flatContainerStyle={styles.flatStyle}
@@ -165,9 +156,6 @@ const styles = StyleSheet.create({
     contentStyle: {
         backgroundColor: '#fff',
         color: '#000033',
-        // placeholderColor: '#a9a9a9',
-        // cssText: '#editor {background-color: #f3f3f3}', // initial valid
-        // contentCSSText: 'font-size: 16px; min-height: 200px; height: 100%;', // initial valid
     },
     container: {
         flex: 1,

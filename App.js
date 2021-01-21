@@ -1,10 +1,10 @@
-import { StatusBar } from 'expo-status-bar';
-import React, {useEffect} from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React from 'react';
+
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-// import PlaceholderScreen from './Screens/PlaceholderScreen';
 
+// ************************* Screens **************************
+// import PlaceholderScreen from './Screens/PlaceholderScreen';
 import MainScreen from "./Screens/MainScreen";
 import AddEntry from "./Screens/AddEntry";
 import Settings from './Screens/Settings'
@@ -14,17 +14,17 @@ import LoadingScreen from "./Screens/LoadingScreen";
 import SignIn from "./Screens/SignIn";
 
 import { LogBox } from 'react-native';
-import AppLoading from 'expo-app-loading';
-import { useFonts } from 'expo-font';
-// import NotifService from './NotifService';
-// import * as Font from 'expo-font';
 
+import AppLoading from 'expo-app-loading';
+
+import { useFonts } from 'expo-font';
+
+// Firebase
 import firebase from 'firebase';
 import "firebase/firestore";
 
 import firebaseConfig from './firebase'
 
-// console.log(firebaseConfig)
 if (!firebase.apps.length) {
   console.log('Connected with Firebase')
   firebase.initializeApp(firebaseConfig);
@@ -46,15 +46,29 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        <Stack.Screen name={'Loading'} component={LoadingScreen} options={{ headerShown: false }}/>
+        <Stack.Screen 
+        name={'Loading'} 
+        component={LoadingScreen} 
+        options={{ headerShown: false }}
+        />
         
-        <Stack.Screen name='Home' component={WelcomeScreen} options={{ headerShown: false }}/>
+        <Stack.Screen 
+        name='Home' 
+        component={WelcomeScreen} 
+        options={{ headerShown: false }}
+        />
 
-        <Stack.Screen name='Sign Up' component={SignUp} options={{ headerShown: false }}/>
+        <Stack.Screen 
+        name='Sign Up' 
+        component={SignUp} 
+        options={{ headerShown: false }}
+        />
 
-        <Stack.Screen name='Sign In' component={SignIn} options={{ headerShown: false }}/>
-
-        {/* <Stack.Screen name={'Dashboard'} component={Dashboard} options={{ headerShown: false }} /> use MainScreen */}
+        <Stack.Screen 
+        name='Sign In' 
+        component={SignIn} 
+        options={{ headerShown: false }}
+        />
 
         <Stack.Screen
           name="MainScreen"
@@ -65,6 +79,7 @@ export default function App() {
             headerShown: false,
           }} 
         />
+
         <Stack.Screen 
           name="Settings" 
           component={Settings}
@@ -74,6 +89,7 @@ export default function App() {
             headerShown: false,
           }} 
         />
+
         <Stack.Screen 
           name="Add" 
           component={AddEntry} 
@@ -83,17 +99,10 @@ export default function App() {
             headerShown: false,
           }} 
         />
+        
       </Stack.Navigator>
     </NavigationContainer>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
 
